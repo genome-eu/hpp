@@ -8,8 +8,10 @@ namespace Genome\Lib\Exception;
  */
 class NotStringException extends GeneralGenomeException
 {
-    /** @param string $paramName */
-    public function __construct($paramName)
+    /**
+     * @param string $paramName
+     */
+    public function __construct(string $paramName)
     {
         parent::__construct(
             sprintf('Passed argument `%s` is not string', $paramName)

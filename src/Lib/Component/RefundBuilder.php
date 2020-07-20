@@ -3,7 +3,6 @@
 namespace Genome\Lib\Component;
 
 use Genome\Lib\Exception\GeneralGenomeException;
-use Genome\Lib\Exception\NotBooleanException;
 use Genome\Lib\Model\IdentityInterface;
 use Genome\Lib\Util\ClientInterface;
 use Genome\Lib\Util\CurlClient;
@@ -19,7 +18,7 @@ use Psr\Log\LoggerInterface;
 class RefundBuilder extends BaseBuilder
 {
     /** @var string */
-    private $action = 'api/refund';
+    private $action = 'api/extended_refund';
 
     /** @var IdentityInterface */
     private $identity;
@@ -51,9 +50,9 @@ class RefundBuilder extends BaseBuilder
      */
     public function __construct(
         IdentityInterface $identity,
-        $transactionId,
+        string $transactionId,
         LoggerInterface $logger,
-        $baseHost
+        string $baseHost
     ) {
         parent::__construct($logger);
 
@@ -63,23 +62,27 @@ class RefundBuilder extends BaseBuilder
         $this->transactionId = $this->validator->validateString('transactionId', $transactionId);
         $this->baseHost = $baseHost;
         $this->client = new CurlClient($this->baseHost . $this->action, $logger);
-        $this->signatureHelper  = new SignatureHelper();
+        $this->signatureHelper = new SignatureHelper();
 
         $this->logger->info('Refund builder successfully initialized');
     }
 
     /**
+     * @param float $amount
+     * @param string $currencyCode
      * @return array
      * @throws GeneralGenomeException
      */
-    public function send()
+    public function send(float $amount, string $currencyCode): array
     {
         $data = [
             'transactionId' => $this->transactionId,
-            'publicKey' => $this->identity->getPublicKey()
+            'publicKey' => $this->identity->getPublicKey(),
+            'amount' => $amount,
+            'currency' => $currencyCode,
         ];
 
-        $data['signature'] = $this->signatureHelper->generate(
+        $data['signature'] = $this->signatureHelper->generateForArray(
             $data,
             $this->identity->getPrivateKey(),
             true
