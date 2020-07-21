@@ -12,8 +12,8 @@ interface ClientInterface
 {
     /**
      * @param mixed[] $data
-     * @throws GeneralGenomeException
      * @return mixed[]
+     * @throws GeneralGenomeException
      */
     public function send(array $data);
 }

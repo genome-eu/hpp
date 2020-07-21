@@ -9,7 +9,7 @@ class InvalidStringLengthException extends GeneralGenomeException
      * @param int $maxLength
      * @param int $minLength
      */
-    public function __construct($paramName, $maxLength, $minLength)
+    public function __construct(string $paramName, int $maxLength, int $minLength)
     {
         parent::__construct(
             sprintf(

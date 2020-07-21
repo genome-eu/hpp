@@ -17,19 +17,21 @@ interface ValidatorInterface
      * @param string $value
      * @param int $minLength
      * @param int|null $maxLength
-     * @throws GeneralGenomeException
      * @return string
+     * @throws GeneralGenomeException
      */
-    public function validateString($paramName, $value, $minLength = 1, $maxLength = null);
+    public function validateString(string $paramName, string $value, int $minLength = 1, int $maxLength = null): string;
 
     /**
      * @param string $paramName
      * @param float|int $value
-     * @throws GeneralGenomeException
      * @return float|int
+     * @throws GeneralGenomeException
      */
-    public function validateNumeric($paramName, $value);
+    public function validateNumeric(string $paramName, $value);
 
-    /** @return string */
-    public function getDefaultEncoding();
+    /**
+     * @return string
+     */
+    public function getDefaultEncoding(): string;
 }
